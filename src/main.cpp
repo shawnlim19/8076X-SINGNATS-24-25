@@ -8,12 +8,14 @@ bool beep = false;
 void initialize()
 {   
     chassis.calibrate(true);
-    Task ringTask(ringControl);
-    Task intakeTask(intakeControl);
-    Task climbTask(climbControl);
 
-    Task displayTask(displayControl);
-    // Task autoclampTask(autoclampControl);
+    //Mechanism Tasks (More information in Mechcontrol.cpp)
+    Task ringTask(ringControl); //Detecting where the ring is
+    Task intakeTask(intakeControl); //Changing the intake speed based on where the ring is 
+    Task climbTask(climbControl); //Climbing sequence
+
+    //Display Tasks (More information in display.cpp)
+    Task displayTask(displayControl); //Brain screen with auton selector
     Task controllerTask([&]() {
         delay(100);
         master.clear();
@@ -47,20 +49,8 @@ void autonomous()
     double start = millis(); 
     autons = true;
     autoclampBool = true;
-    // delay(10000);
-    // soloAWP();
-    // soloAWPSafe();
-    // ringSide();
-    // skills();
-    // goalSide();
-    // goalSideSafe();
 
-    // chassis.turnToHeading(90, 1000);
-    // chassis.moveToPose(24, 24, 90, 1000, {.lead=0.4});
-    // goalSideSafe();
-    // goalSide();
-    // moveDistance(-24, {.forwards = false, .maxSpeed = 127, .minSpeed = 50});
-
+    //Switch case for auton selector
     switch (autonnum)
     {
     case 1:
