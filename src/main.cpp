@@ -16,26 +16,7 @@ void initialize()
 
     //Display Tasks (More information in display.cpp)
     Task displayTask(displayControl); //Brain screen with auton selector
-    Task controllerTask([&]() {
-        delay(100);
-        master.clear();
-        while (true) {
-            master.print(0, 0, "batt: %.0f", battery::get_capacity());
-            Task::delay(50);
-            double temp[6] = {FL.get_temperature(), FR.get_temperature(), CL.get_temperature(), CR.get_temperature(), BR.get_temperature(), BL.get_temperature()};
-            master.print(1, 0, "av. temp: %.0f", ((temp[0] + temp[1] + temp[2] + temp[3] + temp[4] + temp[5])/6));
-            Task::delay(50);            
-            double max_temp = std::max({temp[0], temp[1], temp[2], temp[3], temp[4], temp[5]});
-            master.print(1, 14, "h: %.0f", max_temp);
-            Task::delay(50);
-            master.print(2, 0, "intake temp: %.0f", intake.get_temperature());
-            Task::delay(50);
-            if (beep) {
-                master.rumble(".");
-                Task::delay(50);
-                beep = false;
-            }
-        } });
+    Task controllerTask(controllerControl);
 }
 
 void disabled() {}
@@ -136,11 +117,6 @@ void opcontrol() {
             }
         }
 
-        // if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_X)){
-        //     manualintake = !manualintake;
-        //     stage = 0;
-        // }
-
         if (master.get_digital_new_press(E_CONTROLLER_DIGITAL_A)) {
             wallstake = !wallstake;
         }
@@ -187,6 +163,7 @@ void opcontrol() {
         } else {
             intakeSpeed = 0;
         }
+        
         if (wallstakeBool) {
             setIntakeSpeed(0, intakeSpeed);
         } else if (manualintake) {
