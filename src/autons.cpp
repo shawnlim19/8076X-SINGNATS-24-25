@@ -730,3 +730,4 @@ void skills() {
     climbing = !climbing;
     climbsection += 1;
 }
+

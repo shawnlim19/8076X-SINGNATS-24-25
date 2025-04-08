@@ -28,8 +28,8 @@ Controller master(pros::E_CONTROLLER_MASTER);
 adi::Pneumatics clamp('C', false);
 adi::Pneumatics sweeper('D', false);
 adi::Pneumatics climb('B', false);
-adi::Pneumatics intakestack('A', false);
-adi::Pneumatics wallstakearm('E', false);
+adi::Pneumatics intakestack('E', false);
+adi::Pneumatics wallstakearm('A', false);
 
 // Inertial Sensor
 Imu inertial(9);
@@ -39,37 +39,41 @@ Distance stakesensor(7);
 
 // tracking wheels
 Rotation horizontalEnc(16);
+Rotation verticalEnc(1);
 Rotation climbEnc(3);
 
-// horizontal tracking wheel. 2.75" diameter, 3.7" offset, back of the robot
-lemlib::TrackingWheel horizontal(&horizontalEnc, 2, -3.76); 
+// horizontal tracking wheel. 2" diameter, 3.7" offset, back of the robot
+lemlib::TrackingWheel horizontal(&horizontalEnc, 2, -3.76); //-3.76 was the previous offset
+// vertical tracking wheel. 2" diameter, " -1.4375" offset
+lemlib::TrackingWheel vertical(&verticalEnc, 2.05, -1.4375); 
+
 
 // drivetrain settings
 lemlib::Drivetrain drivetrain(&left, // left motor group
                               &right, // right motor group
-                              12, // 10 inch track width
-                              3.25, // using new 4" omnis
-                              450, // drivetrain rpm is 300
+                              12, // 12 inch track width
+                              3.25, // using new 3.25" omnis
+                              450, // drivetrain rpm is 450
                               2 // chase power is 2. If we had traction wheels, it would have been 8
 );
 
 // lateral motion controller
-lemlib::ControllerSettings linearController(20, // proportional gain (kP)
+lemlib::ControllerSettings linearController(20, // proportional gain (kP) 20
                                             0,
-                                            50, // derivative gain (kD)
+                                            50, // derivative gain (kD) 50
                                             0,
-                                            1, // small error range, in inches
-                                            50, // small error range timeout, in milliseconds
-                                            3, // large error range, in inches
-                                            100, // large error range timeout, in milliseconds
-                                            32// maximum acceleration (slew)
+                                            1, // small error range, in inches 1
+                                            50, // small error range timeout, in milliseconds 50
+                                            3, // large error range, in inches 3
+                                            100, // large error range timeout, in milliseconds 100
+                                            32// maximum acceleration (slew) 32
 );
 
 // angular motion controller
 lemlib::ControllerSettings angularController(3.75, // proportional gain (kP)
                                              0,
                                              22.5, // derivative gain (kD)
-                                             0,
+                                             0, //prev was 0
                                              1, // small error range, in degrees
                                              50, // small error range timeout, in milliseconds
                                              3, // large error range, in degrees
@@ -79,7 +83,7 @@ lemlib::ControllerSettings angularController(3.75, // proportional gain (kP)
 
 // sensors for odometry
 // note that in this example we use internal motor encoders, so we don't pass vertical tracking wheels
-lemlib::OdomSensors sensors(nullptr, // vertical tracking wheel 1, set to nullptr as we don't have one
+lemlib::OdomSensors sensors(&vertical, // vertical tracking wheel 1
                             nullptr, // vertical tracking wheel 2, set to nullptr as we don't have one
                             &horizontal, // horizontal tracking wheel 1
                             // nullptr,
