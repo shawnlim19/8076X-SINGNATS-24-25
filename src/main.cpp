@@ -41,9 +41,11 @@ ASSET(path_txt);
 
 void autonomous()
 {
-//     double start = millis(); 
+    double start = millis(); 
 //     autons = true;
 //     autoclampBool = true;
+
+    ringSide();
 
     // //Switch case for auton selector
     // switch (autonnum)
@@ -76,14 +78,14 @@ void autonomous()
     //     skills();
     //     break;
     // }
-
+ 
     // chassis.waitUntilDone();
 
-    // screen::print(TEXT_SMALL, 300, 180, "Time elapsed: %f", (millis() - start)/1000);
+    screen::print(TEXT_SMALL, 300, 180, "Time elapsed: %f", (millis() - start)/1000);
         // set position to x:0, y:0, heading:0
    
        // set position to x:0, y:0, heading:0
-    chassis.setPose(0, 0, 0);
+    // chassis.setPose(0, 0, 0);
 //     chassis.moveToPose(
 //     24, // x = 24
 //     48, // y = 48
@@ -91,7 +93,14 @@ void autonomous()
 //     10000, // timeout of 4000ms
 //     {.lead = 0.4, .minSpeed = 100}
 // );
-    chassis.moveToPose(48, 72, 0, 4000, {.lead = -0.5});
+    // chassis.turnToHeading(90, 1000);
+
+    // chassis.turnToHeading(180, 1000);
+
+    // chassis.turnToHeading(270, 1000);
+
+    // chassis.turnToHeading(0, 1000);
+    // chassis.moveToPose(48, 72, 0, 4000, {.lead = -0.5});
 
 }
 
